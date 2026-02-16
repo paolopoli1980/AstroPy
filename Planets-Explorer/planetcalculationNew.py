@@ -66,7 +66,7 @@ def calculation(ts,tp,e,tilting,a,rp,dp,albedo):
         mstar=4*math.pi**2*(a*Au)**3/((ts*3600*24)**2*g)
         xf=math.sqrt(a**2-b**2)
         lstar=ls*(mstar/(ms*10**(qstar)))**staresp
-        tf=ts*24*10**timetot
+        tf=ts*24*3**timetot
         inct=tp/100
         boltzstef=5.67*10**(-8) 
         dstar=1.41*10**3
@@ -180,8 +180,7 @@ def calculation(ts,tp,e,tilting,a,rp,dp,albedo):
                     phi = 0
 
                                #print(phi)
-                if phi<0:
-                    phi=0
+             
                     
                 
                 philist.append(phi)
