@@ -155,13 +155,31 @@ def calculation(ts,tp,e,tilting,a,rp,dp,albedo):
             while t<tf: 
                 t+=inct
                 beta=wt*t+betazero
-                phi=(-a*math.cos(ws*t+teta)+xf)*(math.cos(beta)*math.sin(alfa)*math.cos(omega)-math.cos(alfa)*math.sin(omega))
-                phi=phi-b*math.sin(ws*t+teta)*math.sin(beta)*math.sin(alfa)
-                phi=phi/math.sqrt((-a*math.cos(ws*t+teta)+xf)**2+b**2*math.sin(ws*t+teta)**2)
-                #angle1=math.atan(1/(Au*math.sqrt((-a*math.cos(ws*t+teta)+xf)**2+b**2*math.sin(ws*t+teta)**2)))
-                #angle2=math.atan(1/(b*Au))
-                phi=phi*(dmin**2/((-a*math.cos(ws*t+teta)+xf)**2+b**2*math.sin(ws*t+teta)**2))
-                #print(phi)
+                M = 2*np.pi * t / (ts*24)
+                E = solve_kepler(M, e)
+                d = a * (1 - e*np.cos(E))
+
+                theta = 2 * np.arctan2(
+                    np.sqrt(1+e) * np.sin(E/2),
+                    np.sqrt(1-e) * np.cos(E/2)
+                )
+
+                # coordinate ellittiche fisiche
+                x = a*np.cos(theta) - xf
+                y = b*np.sin(theta)
+
+                # tua geometria invariata
+                phi = x*(math.cos(beta)*math.sin(alfa)*math.cos(omega) - math.cos(alfa)*math.sin(omega))
+                phi = phi - y*math.sin(beta)*math.sin(alfa)
+
+                # normalizzazione fisica
+                phi = phi / math.sqrt(x**2 + y**2)
+                phi = phi * (dmin**2 / d**2)
+
+                if phi < 0:
+                    phi = 0
+
+                               #print(phi)
                 if phi<0:
                     phi=0
                     
